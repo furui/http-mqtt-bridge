@@ -10,13 +10,10 @@ RUN go mod download
 # Target architecture arguments supplied automatically by Buildx
 ARG TARGETOS
 ARG TARGETARCH
-ARG TARGETVARIANT
 
 # Build the application
 COPY . .
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
-    $(if [ "$TARGETVARIANT" = "v7" ]; then echo "GOARM=7"; fi) \
-    go build -o http-mqtt-bridge main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o http-mqtt-bridge main.go
 
 # Stage 2: Create the minimal runtime image
 FROM alpine:latest
